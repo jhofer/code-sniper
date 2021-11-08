@@ -3,9 +3,16 @@ import React, { useEffect, useRef, useState } from "react";
 import AceEditor from "react-ace";
 import { SearchBox } from "@fluentui/react/lib/SearchBox";
 import { Stack, IStackTokens } from "@fluentui/react/lib/Stack";
-import { getTheme, mergeStyleSets, TextField } from "@fluentui/react";
+import { ComboBox, getTheme, mergeStyleSets, TextField } from "@fluentui/react";
 import { FocusZone } from "@fluentui/react-focus";
 import { CodeBlock, dracula } from "react-code-blocks";
+import { languages } from "./languages";
+
+languages.forEach((a) => {
+  require(`ace-builds/src-noconflict/mode-${a}`);
+});
+
+import "ace-builds/src-noconflict/theme-dracula";
 
 const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
 // import { windowContainer } from "./index";
@@ -47,11 +54,13 @@ export const Search = () => {
   const [selected, setSelected] = useState(-1);
   const [description, setDescription] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [language, setLanguage] = useState("typescript");
   const [newSnip, setNewSnip] = useState(false);
   const [snippets, setSnippets] = useState([
     {
       description: "searchbox",
-      snip: `  <SearchBox
+      language: "typescript",
+      snip: `<SearchBox
   ref={searchBoxRef}
   autoFocus
   placeholder="Search Snippet"
@@ -61,6 +70,7 @@ export const Search = () => {
     },
     {
       description: "useRef",
+      language: "typescript",
       snip: "const searchBoxRef = useRef(null);",
     },
   ]);
@@ -75,6 +85,7 @@ export const Search = () => {
     ipcRenderer.on("new-snip", () => {
       titleFieldRef.current?.focus();
       setNewSnip(true);
+      setDescription("");
     });
     ipcRenderer.on("search-snip", () => {
       searchBoxRef.current?.focus();
@@ -94,27 +105,45 @@ export const Search = () => {
   );
 
   return newSnip ? (
-    <Stack tokens={stackTokens} style={{ height: "100vh" }}>
-      <TextField
-        componentRef={titleFieldRef}
-        autoFocus
-        placeholder="Snippet Description"
-        value={description}
-        onChange={(ev) => setDescription(ev.currentTarget.value)}
-        onKeyDown={(e) => {
-          if (e.key == "Enter") {
-            setSnippets([...snippets, { description, snip }]);
-            ipcRenderer.send("close-window", snip);
-          }
-        }}
-      />
+    <Stack style={{ height: "100vh", width: "100vw" }}>
+      <Stack horizontal style={{ width: "100%" }}>
+        <Stack.Item>
+          <ComboBox
+            text={language}
+            onChange={(e, o, i) => {
+              console.log(o.text);
+              setLanguage(o.text);
+            }}
+            style={{ width: 200 }}
+            allowFreeform={false}
+            autoComplete={"on"}
+            options={languages.map((l) => ({ key: l, text: l }))}
+          />
+        </Stack.Item>
+        <Stack.Item align="stretch" style={{ width: "100%" }}>
+          <TextField
+            style={{ width: "100%" }}
+            componentRef={titleFieldRef}
+            placeholder="Snippet Description"
+            value={description}
+            onChange={(ev) => setDescription(ev.currentTarget.value)}
+            onKeyDown={(e) => {
+              if (e.key == "Enter") {
+                setSnippets([...snippets, { description, snip, language }]);
+                ipcRenderer.send("close-window", snip);
+              }
+            }}
+          />
+        </Stack.Item>
+      </Stack>
       <AceEditor
         style={{
           height: "100%",
           width: "100%",
         }}
+        theme="dracula"
         placeholder="Code here"
-        mode="javascript"
+        mode={language}
         name="basic-code-editor"
         onChange={(currentCode) => setSnip(currentCode)}
         fontSize={13}
@@ -162,6 +191,7 @@ export const Search = () => {
             onFocus={() => setSelected(i)}
           >
             <h1>{s.description}</h1>
+            <h2>{s.language}</h2>
             <CodeBlock
               text={s.snip}
               language={"typescript"}
