@@ -129,8 +129,10 @@ export const Search = () => {
             onChange={(ev) => setDescription(ev.currentTarget.value)}
             onKeyDown={(e) => {
               if (e.key == "Enter") {
-                setSnippets([...snippets, { description, snip, language }]);
-                ipcRenderer.send("close-window", snip);
+                const newSnip = { description, snip, language };
+                setSnippets([...snippets, newSnip]);
+                ipcRenderer.send("save-snip", newSnip);
+                ipcRenderer.send("close-window");
               }
             }}
           />
@@ -194,7 +196,7 @@ export const Search = () => {
             <h2>{s.language}</h2>
             <CodeBlock
               text={s.snip}
-              language={"typescript"}
+              language={s.language}
               showLineNumbers
               theme={dracula}
             />
