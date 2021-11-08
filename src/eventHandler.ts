@@ -24,16 +24,18 @@ export const registerEventListener = () => {
   ipcMain.on("save-snip", (event, snippet) => {
     const path = store.get("savepath");
     const { description, snip, language } = snippet;
-    const fileName = language + "_" + description.replace(" ", "_") + ".md";
+    const fileName = language + ".md";
     const filePath = path + "/" + fileName;
     console.log("write to", filePath);
-    fs.writeFileSync(
+    fs.appendFile(
       filePath,
-      `# ${description}
+      `___
+# ${description}
 \`\`\`${language}
 ${snip}
 \`\`\`
-`
+`,
+      console.error
     );
   });
 };
