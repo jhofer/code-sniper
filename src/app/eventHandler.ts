@@ -1,7 +1,9 @@
 import { BrowserWindow, clipboard, ipcMain } from "electron";
 import fs from "fs";
+import path from "path";
 import robot from "robotjs";
-import { store } from "./index";
+import { store, windowContainer } from "../index";
+import { loadSnips } from "./loadSnips";
 
 export const registerEventListener = () => {
   ipcMain.on("paste-snipped", (event, arg) => {
@@ -22,10 +24,10 @@ export const registerEventListener = () => {
     BrowserWindow.getFocusedWindow().hide();
   });
   ipcMain.on("save-snip", (event, snippet) => {
-    const path = store.get("savepath");
+    const savepath = store.get("savepath") as string;
     const { description, snip, language } = snippet;
     const fileName = language + ".md";
-    const filePath = path + "/" + fileName;
+    const filePath = path.join(savepath, fileName);
     console.log("write to", filePath);
     fs.appendFile(
       filePath,
@@ -37,5 +39,11 @@ ${snip}
 `,
       console.error
     );
+  });
+
+  ipcMain.on("load-snippets-requested", () => {
+    console.log("load-snippets-requested");
+    const snippets = loadSnips();
+    windowContainer.win.webContents.send("load-snippets-succeeded", snippets);
   });
 };

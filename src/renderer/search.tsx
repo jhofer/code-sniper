@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import AceEditor from "react-ace";
 import { SearchBox } from "@fluentui/react/lib/SearchBox";
 import { Stack, IStackTokens } from "@fluentui/react/lib/Stack";
-import { ComboBox, getTheme, mergeStyleSets, TextField } from "@fluentui/react";
+import { ComboBox, TextField } from "@fluentui/react";
 import { FocusZone } from "@fluentui/react-focus";
 import { CodeBlock, dracula } from "react-code-blocks";
 import { languages } from "./languages";
@@ -13,41 +13,9 @@ languages.forEach((a) => {
 });
 
 import "ace-builds/src-noconflict/theme-dracula";
+import { classNames } from "./theme";
 
 const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
-// import { windowContainer } from "./index";
-const theme = getTheme();
-const classNames = mergeStyleSets({
-  photoList: {
-    display: "inline-block",
-    border: "1px solid " + theme.palette.neutralTertiary,
-    padding: 10,
-    lineHeight: 0,
-    overflow: "hidden",
-  },
-  photoCell: {
-    position: "relative",
-    display: "inline-block",
-    padding: 2,
-    boxSizing: "border-box",
-    selectors: {
-      "&:focus": {
-        outline: "none",
-      },
-      "&:focus:after": {
-        content: '""',
-        position: "absolute",
-        right: 4,
-        left: 4,
-        top: 4,
-        bottom: 4,
-        border: "1px solid " + theme.palette.white,
-        outline: "2px solid " + theme.palette.themePrimary,
-      },
-    },
-  },
-});
-
 export const Search = () => {
   const [clipboardText, setClipboard] = useState(clipboard.readText());
   const [snip, setSnip] = useState(clipboardText);
@@ -56,24 +24,7 @@ export const Search = () => {
   const [searchText, setSearchText] = useState("");
   const [language, setLanguage] = useState("typescript");
   const [newSnip, setNewSnip] = useState(false);
-  const [snippets, setSnippets] = useState([
-    {
-      description: "searchbox",
-      language: "typescript",
-      snip: `<SearchBox
-  ref={searchBoxRef}
-  autoFocus
-  placeholder="Search Snippet"
-  value={searchText}
-  onChange={(e) => setSearchText(e.currentTarget.value)}
-/>`,
-    },
-    {
-      description: "useRef",
-      language: "typescript",
-      snip: "const searchBoxRef = useRef(null);",
-    },
-  ]);
+  const [snippets, setSnippets] = useState([]);
   const searchBoxRef = useRef(null);
   const titleFieldRef = useRef(null);
 
@@ -90,6 +41,11 @@ export const Search = () => {
     ipcRenderer.on("search-snip", () => {
       searchBoxRef.current?.focus();
       setNewSnip(false);
+    });
+    ipcRenderer.send("load-snippets-requested");
+    ipcRenderer.on("load-snippets-succeeded", (ev, snippets) => {
+      console.log("load-snippets-succeeded", snippets);
+      setSnippets(snippets);
     });
   }, []);
 
