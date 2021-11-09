@@ -28,7 +28,7 @@ const parseFileContent = (data: string, language: string) => {
     const [description, snip] = splitted;
     return {
       language,
-      description,
+      description: description.replace("# ", ""),
       snip,
     };
   });
