@@ -14,6 +14,7 @@ languages.forEach((a) => {
 
 import "ace-builds/src-noconflict/theme-dracula";
 import { classNames } from "./theme";
+import { useSnippets } from "./useSnippets";
 
 const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
 export const Search = () => {
@@ -24,7 +25,7 @@ export const Search = () => {
   const [searchText, setSearchText] = useState("");
   const [language, setLanguage] = useState("typescript");
   const [newSnip, setNewSnip] = useState(false);
-  const [snippets, setSnippets] = useState([]);
+  const [snippets, addSnippets] = useSnippets();
   const searchBoxRef = useRef(null);
   const titleFieldRef = useRef(null);
 
@@ -41,11 +42,6 @@ export const Search = () => {
     ipcRenderer.on("search-snip", () => {
       searchBoxRef.current?.focus();
       setNewSnip(false);
-    });
-    ipcRenderer.send("load-snippets-requested");
-    ipcRenderer.on("load-snippets-succeeded", (ev, snippets) => {
-      console.log("load-snippets-succeeded", snippets);
-      setSnippets(snippets);
     });
   }, []);
 
@@ -86,8 +82,7 @@ export const Search = () => {
             onKeyDown={(e) => {
               if (e.key == "Enter") {
                 const newSnip = { description, snip, language };
-                setSnippets([...snippets, newSnip]);
-                ipcRenderer.send("save-snip", newSnip);
+                addSnippets(newSnip);
                 ipcRenderer.send("close-window");
               }
             }}
