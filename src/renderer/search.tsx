@@ -15,39 +15,31 @@ languages.forEach((a) => {
 import "ace-builds/src-noconflict/theme-dracula";
 import { classNames } from "./theme";
 import { useSnippets } from "./useSnippets";
+import { useSnip } from "./useSnip";
 
 const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
 export const Search = () => {
-  const [clipboardText, setClipboard] = useState(clipboard.readText());
-  const [snip, setSnip] = useState(clipboardText);
+  const [snip, setSnip] = useSnip();
   const [selected, setSelected] = useState(-1);
   const [description, setDescription] = useState("");
   const [searchText, setSearchText] = useState("");
   const [language, setLanguage] = useState("typescript");
-  const [newSnip, setNewSnip] = useState(false);
+  const [doCreateSnip, setDoCreateSnip] = useState(false);
   const [snippets, addSnippets] = useSnippets();
   const searchBoxRef = useRef(null);
   const titleFieldRef = useRef(null);
 
-  setInterval(() => {
-    setClipboard(clipboard.readText());
-  }, 1000);
-
   useEffect(() => {
     ipcRenderer.on("new-snip", () => {
       titleFieldRef.current?.focus();
-      setNewSnip(true);
+      setDoCreateSnip(true);
       setDescription("");
     });
     ipcRenderer.on("search-snip", () => {
       searchBoxRef.current?.focus();
-      setNewSnip(false);
+      setDoCreateSnip(false);
     });
   }, []);
-
-  useEffect(() => {
-    setSnip(clipboardText);
-  }, [clipboardText]);
 
   const filteredSnippets = snippets.filter(
     (s) =>
@@ -56,7 +48,7 @@ export const Search = () => {
       s.snip.includes(searchText)
   );
 
-  return newSnip ? (
+  return doCreateSnip ? (
     <Stack style={{ height: "100vh", width: "100vw" }}>
       <Stack horizontal style={{ width: "100%" }}>
         <Stack.Item>

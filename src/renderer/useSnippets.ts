@@ -8,7 +8,7 @@ interface Snip {
 }
 
 export function useSnippets(): [Array<Snip>, (snip: Snip) => void] {
-  const [snippets, setSnippets] = useState([]);
+  const [snippets, setSnippets] = useState<Array<Snip>>([]);
   useEffect(() => {
     ipcRenderer.send("load-snippets-requested");
     ipcRenderer.on("load-snippets-succeeded", (ev, snippets) => {
