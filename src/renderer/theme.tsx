@@ -2,17 +2,17 @@ import { getTheme, mergeStyleSets } from "@fluentui/react";
 
 const theme = getTheme();
 export const classNames = mergeStyleSets({
-  photoList: {
+  snippetList: {
     display: "inline-block",
     border: "1px solid " + theme.palette.neutralTertiary,
     padding: 10,
     lineHeight: 0,
     overflow: "hidden",
   },
-  photoCell: {
+  codeSnippet: {
     position: "relative",
     display: "inline-block",
-    padding: 2,
+    padding: 10,
     boxSizing: "border-box",
     selectors: {
       "&:focus": {

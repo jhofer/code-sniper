@@ -1,6 +1,6 @@
 {
-  "name": "electron-typescript-react",
-  "productName": "electron-typescript-react",
+  "name": "code-sniper",
+  "productName": "code-sniper",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",

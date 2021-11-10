@@ -53,13 +53,14 @@ export const Search = () => {
       <Stack horizontal style={{ width: "100%" }}>
         <Stack.Item>
           <ComboBox
+            componentRef={titleFieldRef}
             text={language}
             onChange={(e, o, i) => {
               console.log(o.text);
               setLanguage(o.text);
             }}
             style={{ width: 200 }}
-            allowFreeform={false}
+            allowFreeform={true}
             autoComplete={"on"}
             options={languages.map((l) => ({ key: l, text: l }))}
           />
@@ -67,7 +68,6 @@ export const Search = () => {
         <Stack.Item align="stretch" style={{ width: "100%" }}>
           <TextField
             style={{ width: "100%" }}
-            componentRef={titleFieldRef}
             placeholder="Snippet Description"
             value={description}
             onChange={(ev) => setDescription(ev.currentTarget.value)}
@@ -106,7 +106,7 @@ export const Search = () => {
       />
     </Stack>
   ) : (
-    <Stack tokens={stackTokens}>
+    <Stack>
       <SearchBox
         ref={searchBoxRef}
         autoFocus
@@ -116,7 +116,7 @@ export const Search = () => {
       />
       <FocusZone
         as="ul"
-        className={classNames.photoList}
+        className={classNames.snippetList}
         onKeyDown={(e) => {
           if (e.key == "Enter") {
             const selectedSnippets = filteredSnippets[selected];
@@ -127,7 +127,7 @@ export const Search = () => {
       >
         {filteredSnippets.map((s, i) => (
           <li
-            className={classNames.photoCell}
+            className={classNames.codeSnippet}
             key={i}
             aria-posinset={i + 1}
             aria-setsize={filteredSnippets.length}
