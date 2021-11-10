@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Search } from "./search";
+import { MainWindow } from "./mainWindow";
 function render() {
-  ReactDOM.render(<Search />, document.body);
+  ReactDOM.render(<MainWindow />, document.body);
 }
 render();

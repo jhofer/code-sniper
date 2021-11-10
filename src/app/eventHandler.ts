@@ -2,11 +2,18 @@ import { BrowserWindow, clipboard, ipcMain } from "electron";
 import fs from "fs";
 import path from "path";
 import robot from "robotjs";
+import {
+  CLOSE_WINDOW,
+  LOAD_SNIPPETS_REQUESTED,
+  LOAD_SNIPPETS_SUCCEEDED,
+  PASTE_SNIPPED,
+  SAVE_SNIP,
+} from "../constants";
 import { store, windowContainer } from "../index";
 import { loadSnips } from "./loadSnips";
 
 export const registerEventListener = () => {
-  ipcMain.on("paste-snipped", (event, arg) => {
+  ipcMain.on(PASTE_SNIPPED, (event, arg) => {
     console.log(event);
     console.log(arg);
     BrowserWindow.getFocusedWindow().hide();
@@ -18,12 +25,12 @@ export const registerEventListener = () => {
       console.log("stuff pasted");
     }, 100);
   });
-  ipcMain.on("close-window", (event, arg) => {
+  ipcMain.on(CLOSE_WINDOW, (event, arg) => {
     console.log(event);
     console.log(arg);
     BrowserWindow.getFocusedWindow().hide();
   });
-  ipcMain.on("save-snip", (event, snippet) => {
+  ipcMain.on(SAVE_SNIP, (event, snippet) => {
     const savepath = store.get("savepath") as string;
     const { description, snip, language } = snippet;
     const fileName = language + ".md";
@@ -41,9 +48,8 @@ ${snip}
     );
   });
 
-  ipcMain.on("load-snippets-requested", () => {
-    console.log("load-snippets-requested");
+  ipcMain.on(LOAD_SNIPPETS_REQUESTED, () => {
     const snippets = loadSnips();
-    windowContainer.win.webContents.send("load-snippets-succeeded", snippets);
+    windowContainer.win.webContents.send(LOAD_SNIPPETS_SUCCEEDED, snippets);
   });
 };

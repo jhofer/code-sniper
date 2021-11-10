@@ -2,9 +2,10 @@ import { store } from "../index";
 import fs from "fs";
 import path from "path";
 import { EOL } from "os";
+import { SAVE_PATH_KEY } from "../constants";
 
 export const loadSnips = () => {
-  const savepath = store.get("savepath") as string;
+  const savepath = store.get(SAVE_PATH_KEY) as string;
   const files = fs.readdirSync(savepath);
   const allSnippets = files
     .reduce((all, fileName) => {

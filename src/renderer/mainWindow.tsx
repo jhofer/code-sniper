@@ -6,19 +6,15 @@ import { Stack, IStackTokens } from "@fluentui/react/lib/Stack";
 import { ComboBox, TextField } from "@fluentui/react";
 import { FocusZone } from "@fluentui/react-focus";
 import { CodeBlock, dracula } from "react-code-blocks";
-import { languages } from "./languages";
-
-languages.forEach((a) => {
-  require(`ace-builds/src-noconflict/mode-${a}`);
-});
-
 import "ace-builds/src-noconflict/theme-dracula";
+
+import { languages } from "./languages";
 import { classNames } from "./theme";
 import { useSnippets } from "./useSnippets";
 import { useSnip } from "./useSnip";
+import { PASTE_SNIPPED, SEARCH_SNIP, NEW_SNIP } from "../constants";
 
-const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
-export const Search = () => {
+export const MainWindow = () => {
   const [snip, setSnip] = useSnip();
   const [selected, setSelected] = useState(-1);
   const [description, setDescription] = useState("");
@@ -30,12 +26,12 @@ export const Search = () => {
   const titleFieldRef = useRef(null);
 
   useEffect(() => {
-    ipcRenderer.on("new-snip", () => {
+    ipcRenderer.on(NEW_SNIP, () => {
       titleFieldRef.current?.focus();
       setDoCreateSnip(true);
       setDescription("");
     });
-    ipcRenderer.on("search-snip", () => {
+    ipcRenderer.on(SEARCH_SNIP, () => {
       searchBoxRef.current?.focus();
       setDoCreateSnip(false);
     });
@@ -120,7 +116,7 @@ export const Search = () => {
         onKeyDown={(e) => {
           if (e.key == "Enter") {
             const selectedSnippets = filteredSnippets[selected];
-            ipcRenderer.send("paste-snipped", selectedSnippets.snip);
+            ipcRenderer.send(PASTE_SNIPPED, selectedSnippets.snip);
             console.log("select snippet");
           }
         }}
