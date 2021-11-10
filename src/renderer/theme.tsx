@@ -4,7 +4,6 @@ const theme = getTheme();
 export const classNames = mergeStyleSets({
   snippetList: {
     display: "inline-block",
-    border: "1px solid " + theme.palette.neutralTertiary,
     padding: 10,
     lineHeight: 0,
     overflow: "hidden",

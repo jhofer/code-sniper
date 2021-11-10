@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { EOL } from "os";
 import { SAVE_PATH_KEY } from "../constants";
+import { BrowserWindow, dialog } from "electron";
 
 export const loadSnips = () => {
   const savepath = store.get(SAVE_PATH_KEY) as string;
@@ -34,3 +35,22 @@ const parseFileContent = (data: string, language: string) => {
     };
   });
 };
+
+export function setStorageFolder(mainWindow: BrowserWindow) {
+  const existingPath = store.get(SAVE_PATH_KEY);
+  if (!existingPath) {
+    const options: any = {
+      properties: ["openDirectory", "createDirectory"],
+      filters: [
+        { name: "md", extensions: ["md"] },
+        { name: "All Files", extensions: ["*"] },
+      ],
+    };
+    dialog.showOpenDialog(mainWindow, options).then((result) => {
+      const [fileName] = result.filePaths;
+      store.set(SAVE_PATH_KEY, fileName);
+    });
+  } else {
+    console.log("existingpath", existingPath);
+  }
+}

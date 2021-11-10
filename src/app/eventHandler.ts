@@ -7,12 +7,13 @@ import {
   LOAD_SNIPPETS_REQUESTED,
   LOAD_SNIPPETS_SUCCEEDED,
   PASTE_SNIPPED,
+  SAVE_PATH_KEY,
   SAVE_SNIP,
 } from "../constants";
 import { store, windowContainer } from "../index";
 import { loadSnips } from "./loadSnips";
 
-export const registerEventListener = () => {
+export const registerEventListener = (mainWindow: BrowserWindow) => {
   ipcMain.on(PASTE_SNIPPED, (event, arg) => {
     console.log(event);
     console.log(arg);
@@ -31,7 +32,7 @@ export const registerEventListener = () => {
     BrowserWindow.getFocusedWindow().hide();
   });
   ipcMain.on(SAVE_SNIP, (event, snippet) => {
-    const savepath = store.get("savepath") as string;
+    const savepath = store.get(SAVE_PATH_KEY) as string;
     const { description, snip, language } = snippet;
     const fileName = language + ".md";
     const filePath = path.join(savepath, fileName);
@@ -50,6 +51,6 @@ ${snip}
 
   ipcMain.on(LOAD_SNIPPETS_REQUESTED, () => {
     const snippets = loadSnips();
-    windowContainer.win.webContents.send(LOAD_SNIPPETS_SUCCEEDED, snippets);
+    mainWindow.webContents.send(LOAD_SNIPPETS_SUCCEEDED, snippets);
   });
 };
