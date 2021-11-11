@@ -14,6 +14,7 @@ interface NewSnippetProps {
   onSave: (snip: Snip) => void;
 }
 
+
 export function NewSnippet(props: NewSnippetProps) {
   const { onSave } = props;
   const [snip, setSnip] = useSnip();
@@ -86,6 +87,7 @@ export function NewSnippet(props: NewSnippetProps) {
           />
         </Stack.Item>
       </Stack>
+
       <AceEditor
         style={{
           height: "100%",

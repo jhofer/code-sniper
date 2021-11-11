@@ -17,7 +17,7 @@ import { NewSnippet } from "./NewSnippet";
 
 export const MainWindow = () => {
   const [selected, setSelected] = useState(-1);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState<string>("");
   const [doCreateSnip, setDoCreateSnip] = useState(false);
   const [snippets, addSnippets] = useSnippets();
 
@@ -34,8 +34,13 @@ export const MainWindow = () => {
   }, []);
 
   useEffect(() => {
-    if (searchText == OPEN_SETTINGS_EDITOR) setSearchText("");
-    ipcRenderer.send(OPEN_SETTINGS_EDITOR);
+    if (
+      searchText.replaceAll(" ", "") ===
+      ">" + OPEN_SETTINGS_EDITOR.replaceAll("-", "")
+    ) {
+      setSearchText("");
+      ipcRenderer.send(OPEN_SETTINGS_EDITOR);
+    }
   }, [searchText]);
 
   const filteredSnippets = snippets.filter(

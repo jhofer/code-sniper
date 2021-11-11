@@ -11,13 +11,14 @@ import {
   SAVE_PATH_KEY,
   SAVE_SNIP,
 } from "../constants";
-import { store, windowContainer } from "../index";
+import { store } from "../index";
 import { loadSnips } from "./loadSnips";
 
 export const registerEventListener = (mainWindow: BrowserWindow) => {
   ipcMain.on(PASTE_SNIPPED, (event, arg) => {
     console.log(event);
     console.log(arg);
+    mainWindow.minimize();
     mainWindow.hide();
     setTimeout(() => {
       console.log("type stuff");

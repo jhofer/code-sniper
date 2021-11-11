@@ -16,11 +16,14 @@ function newSnip(mainWindow: BrowserWindow) {
     } else {
       // copy current selection
       robot.keyTap("c", ["control"]);
-      mainWindow.minimize()
+      setTimeout(()=>{
+       // mainWindow.minimize()
+        mainWindow.show();
+        mainWindow.restore();
+        mainWindow.focus();
+        mainWindow.webContents.send(NEW_SNIP);
+      })
       
-      mainWindow.restore();
-      mainWindow.focus();
-      mainWindow.webContents.send(NEW_SNIP);
     }
     console.log(`${shortCutNew} is pressed`);
   });
