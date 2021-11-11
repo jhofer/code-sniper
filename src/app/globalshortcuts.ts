@@ -15,9 +15,11 @@ function newSnip(mainWindow: BrowserWindow) {
       mainWindow.minimize();
     } else {
       // copy current selection
-      robot.keyTap("c", ["command"]);
-      mainWindow.show();
+      robot.keyTap("c", ["control"]);
+      mainWindow.minimize()
+      
       mainWindow.restore();
+      mainWindow.focus();
       mainWindow.webContents.send(NEW_SNIP);
     }
     console.log(`${shortCutNew} is pressed`);

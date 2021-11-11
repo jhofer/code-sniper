@@ -45,7 +45,7 @@ const createWindow = (): void => {
   setStorageFolder(mainWindow);
   registerGlobalShortCuts(mainWindow);
   registerEventListener(mainWindow);
-  mainWindow.on("blur", () => app.hide());
+  mainWindow.on("blur", () => mainWindow.hide());
   mainWindow.on("show", () => {
     setTimeout(() => {
       mainWindow.focus();
@@ -76,7 +76,7 @@ app.on("activate", () => {
 });
 
 app.on("will-quit", () => {
-  // Unregister all shortcuts.
+  // Unregister allJ shortcuts.
   globalShortcut.unregisterAll();
 });
 

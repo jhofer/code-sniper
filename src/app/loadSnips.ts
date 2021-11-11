@@ -1,7 +1,7 @@
 import { store } from "../index";
 import fs from "fs";
 import path from "path";
-import { EOL } from "os";
+
 import { SAVE_PATH_KEY } from "../constants";
 import { BrowserWindow, dialog } from "electron";
 
@@ -15,6 +15,7 @@ export const loadSnips = () => {
       const fullPath = path.join(savepath, fileName);
       console.log("load file", fullPath);
       const data = fs.readFileSync(fullPath, "utf8");
+      console.log("filecontent: ",data);
       const snippets = parseFileContent(data, language);
       return [...all, ...snippets];
     }, [])
@@ -24,15 +25,21 @@ export const loadSnips = () => {
   return allSnippets;
 };
 const parseFileContent = (data: string, language: string) => {
-  return data.split("___" + EOL).map((element) => {
-    const rgx = new RegExp("```.*" + EOL);
+  const eol = "\n"
+  const snippetsRaw = data.split("___" + eol);
+  console.log(language, "snipets:", snippetsRaw.length)
+  return snippetsRaw.map((element) => {
+    console.log("parse",element)
+    const rgx = new RegExp("```.*" + eol);
     const splitted = element.split(rgx);
     const [description, snip] = splitted;
-    return {
+    const el =  {
       language,
       description: description.replace("# ", ""),
       snip,
     };
+    console.log(el)
+    return el;
   });
 };
 

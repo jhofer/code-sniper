@@ -17,19 +17,19 @@ export const registerEventListener = (mainWindow: BrowserWindow) => {
   ipcMain.on(PASTE_SNIPPED, (event, arg) => {
     console.log(event);
     console.log(arg);
-    BrowserWindow.getFocusedWindow().hide();
+    mainWindow.hide();
     setTimeout(() => {
       console.log("type stuff");
       clipboard.writeText(arg);
       // TODO: fix for windows
-      robot.keyTap("v", ["command"]);
+      robot.keyTap("v", ["control"]);
       console.log("stuff pasted");
     }, 100);
   });
   ipcMain.on(CLOSE_WINDOW, (event, arg) => {
     console.log(event);
     console.log(arg);
-    BrowserWindow.getFocusedWindow().hide();
+    mainWindow.hide();
   });
   ipcMain.on(SAVE_SNIP, (event, snippet) => {
     const savepath = store.get(SAVE_PATH_KEY) as string;
