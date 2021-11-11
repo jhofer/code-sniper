@@ -6,7 +6,7 @@ import {
   SAVE_SNIP,
 } from "../constants";
 
-interface Snip {
+export interface Snip {
   description: string;
   snip: string;
   language: string;
