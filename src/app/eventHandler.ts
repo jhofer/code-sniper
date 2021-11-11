@@ -6,6 +6,7 @@ import {
   CLOSE_WINDOW,
   LOAD_SNIPPETS_REQUESTED,
   LOAD_SNIPPETS_SUCCEEDED,
+  OPEN_SETTINGS_EDITOR,
   PASTE_SNIPPED,
   SAVE_PATH_KEY,
   SAVE_SNIP,
@@ -52,5 +53,9 @@ ${snip}
   ipcMain.on(LOAD_SNIPPETS_REQUESTED, () => {
     const snippets = loadSnips();
     mainWindow.webContents.send(LOAD_SNIPPETS_SUCCEEDED, snippets);
+  });
+
+  ipcMain.on(OPEN_SETTINGS_EDITOR, () => {
+    store.openInEditor();
   });
 };

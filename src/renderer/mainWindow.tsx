@@ -7,7 +7,12 @@ import { CodeBlock, dracula } from "react-code-blocks";
 
 import { classNames } from "./theme";
 import { useSnippets } from "./useSnippets";
-import { PASTE_SNIPPED, SEARCH_SNIP, NEW_SNIP } from "../constants";
+import {
+  PASTE_SNIPPED,
+  SEARCH_SNIP,
+  NEW_SNIP,
+  OPEN_SETTINGS_EDITOR,
+} from "../constants";
 import { NewSnippet } from "./NewSnippet";
 
 export const MainWindow = () => {
@@ -27,6 +32,11 @@ export const MainWindow = () => {
       setDoCreateSnip(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (searchText == OPEN_SETTINGS_EDITOR) setSearchText("");
+    ipcRenderer.send(OPEN_SETTINGS_EDITOR);
+  }, [searchText]);
 
   const filteredSnippets = snippets.filter(
     (s) =>

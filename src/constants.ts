@@ -8,4 +8,5 @@ export const LOAD_SNIPPETS_SUCCEEDED = "load-snippets-succeeded";
 export const CLOSE_WINDOW = "close-window";
 
 // Storage
+export const OPEN_SETTINGS_EDITOR = "open-settings-editor";
 export const SAVE_PATH_KEY = "save-path-key";
