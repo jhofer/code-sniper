@@ -1,5 +1,5 @@
 # Code-Sniper
-Howdy boys and girls this is a little intro and will be gone after you created your first Snippet.
+Little tool to save and insert code snippets easly in every editor
 
 
 # Insert Snippet 
