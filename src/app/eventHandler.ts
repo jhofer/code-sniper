@@ -53,7 +53,9 @@ ${snip}
 
   ipcMain.on(LOAD_SNIPPETS_REQUESTED, () => {
     const snippets = loadSnips();
-    mainWindow.webContents.send(LOAD_SNIPPETS_SUCCEEDED, snippets);
+    if(snippets){
+      mainWindow.webContents.send(LOAD_SNIPPETS_SUCCEEDED, snippets);
+    }
   });
 
   ipcMain.on(OPEN_SETTINGS_EDITOR, () => {

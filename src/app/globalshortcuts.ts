@@ -1,6 +1,7 @@
 import { BrowserWindow, globalShortcut } from "electron";
 import robot from "robotjs";
 import { NEW_SNIP, SEARCH_SNIP } from "../constants";
+import { loadSnips, setStorageFolder } from "./loadSnips";
 
 export const registerGlobalShortCuts = (mainWindow: BrowserWindow) => {
   newSnip(mainWindow);
@@ -14,6 +15,7 @@ function newSnip(mainWindow: BrowserWindow) {
       mainWindow.hide();
       mainWindow.minimize();
     } else {
+      loadSnips();
       // copy current selection
       robot.keyTap("c", ["control"]);
       setTimeout(()=>{
@@ -35,6 +37,7 @@ function searchSnippets(mainWindow: BrowserWindow) {
       mainWindow.hide();
       mainWindow.minimize();
     } else {
+      loadSnips();
       mainWindow.show();
       mainWindow.restore();
       mainWindow.webContents.send(SEARCH_SNIP);

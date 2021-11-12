@@ -3,10 +3,12 @@ import fs from "fs";
 import path from "path";
 
 import { SAVE_PATH_KEY } from "../constants";
-import { BrowserWindow, dialog } from "electron";
+import {  BrowserWindow, dialog } from "electron";
 
 export const loadSnips = () => {
+  setStorageFolder()
   const savepath = store.get(SAVE_PATH_KEY) as string;
+  if(!savepath)return null;
   const files = fs.readdirSync(savepath);
   const allSnippets = files
     .reduce((all, fileName) => {
@@ -43,7 +45,7 @@ const parseFileContent = (data: string, language: string) => {
   });
 };
 
-export function setStorageFolder(mainWindow: BrowserWindow) {
+export function setStorageFolder() {
   const existingPath = store.get(SAVE_PATH_KEY);
   if (!existingPath) {
     const options: any = {
@@ -53,7 +55,7 @@ export function setStorageFolder(mainWindow: BrowserWindow) {
         { name: "All Files", extensions: ["*"] },
       ],
     };
-    dialog.showOpenDialog(mainWindow, options).then((result) => {
+    dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options).then((result) => {
       const [fileName] = result.filePaths;
       store.set(SAVE_PATH_KEY, fileName);
     });

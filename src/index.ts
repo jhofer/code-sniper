@@ -40,9 +40,9 @@ const createWindow = (): void => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
-  setStorageFolder(mainWindow);
+  
   registerGlobalShortCuts(mainWindow);
   registerEventListener(mainWindow);
   mainWindow.on("blur", () => mainWindow.hide());
@@ -51,6 +51,8 @@ const createWindow = (): void => {
       mainWindow.focus();
     }, 200);
   });
+  mainWindow.hide();
+  mainWindow.minimize();
 };
 
 // This method will be called when Electron has finished

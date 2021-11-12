@@ -18,7 +18,7 @@ import { NewSnippet } from "./NewSnippet";
 export const MainWindow = () => {
   const [selected, setSelected] = useState(-1);
   const [searchText, setSearchText] = useState<string>("");
-  const [doCreateSnip, setDoCreateSnip] = useState(false);
+  const [doCreateSnip, setDoCreateSnip] = useState(true);
   const [snippets, addSnippets] = useSnippets();
 
   const searchBoxRef = useRef(null);
