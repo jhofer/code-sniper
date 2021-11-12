@@ -7,7 +7,7 @@ import "ace-builds/src-noconflict/theme-dracula";
 
 import { languages } from "./languages";
 import { useSnip } from "./useSnip";
-import { NEW_SNIP } from "../constants";
+import { NEW_SNIPPET} from "../constants";
 import { Snip } from "./useSnippets";
 
 interface NewSnippetProps {
@@ -22,7 +22,7 @@ export function NewSnippet(props: NewSnippetProps) {
   const [language, setLanguage] = useState("typescript");
 
   useEffect(() => {
-    ipcRenderer.on(NEW_SNIP, () => {
+    ipcRenderer.on(NEW_SNIPPET, () => {
       titleFieldRef.current?.focus();
       setDescription("");
     });
@@ -32,14 +32,15 @@ export function NewSnippet(props: NewSnippetProps) {
   return (
     <Stack
       style={{
-        height: "100vh",
-        width: "100vw",
+        height: "95vh",
+        width: "100%",
+        padding: 10,
       }}
     >
       <Stack
         horizontal
         style={{
-          width: "100%",
+        
         }}
       >
         <Stack.Item>

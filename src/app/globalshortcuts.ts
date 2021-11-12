@@ -1,6 +1,7 @@
 import { BrowserWindow, globalShortcut } from "electron";
 import robot from "robotjs";
-import { NEW_SNIP, SEARCH_SNIP } from "../constants";
+import { store } from "../index";
+import { NEW_SNIPPET, NEW_SNIP_SHORT_CUT, SEARCH_SNIPPET, SEARCH_SNIP_SHORT_CUT } from "../constants";
 import { loadSnips, setStorageFolder } from "./loadSnips";
 
 export const registerGlobalShortCuts = (mainWindow: BrowserWindow) => {
@@ -9,7 +10,8 @@ export const registerGlobalShortCuts = (mainWindow: BrowserWindow) => {
 };
 
 function newSnip(mainWindow: BrowserWindow) {
-  const shortCutNew = "CommandOrControl+M";
+  
+  const shortCutNew = tryGetValue(NEW_SNIP_SHORT_CUT,"CommandOrControl+M");
   globalShortcut.register(shortCutNew, () => {
     if (mainWindow.isVisible()) {
       mainWindow.hide();
@@ -23,7 +25,7 @@ function newSnip(mainWindow: BrowserWindow) {
         mainWindow.show();
         mainWindow.restore();
         mainWindow.focus();
-        mainWindow.webContents.send(NEW_SNIP);
+        mainWindow.webContents.send(NEW_SNIPPET);
       })
       
     }
@@ -31,7 +33,7 @@ function newSnip(mainWindow: BrowserWindow) {
   });
 }
 function searchSnippets(mainWindow: BrowserWindow) {
-  const shortCut = "CommandOrControl+O";
+  const shortCut = tryGetValue(SEARCH_SNIP_SHORT_CUT,"CommandOrControl+O");
   globalShortcut.register(shortCut, () => {
     if (mainWindow.isVisible()) {
       mainWindow.hide();
@@ -40,8 +42,15 @@ function searchSnippets(mainWindow: BrowserWindow) {
       loadSnips();
       mainWindow.show();
       mainWindow.restore();
-      mainWindow.webContents.send(SEARCH_SNIP);
+      mainWindow.webContents.send(SEARCH_SNIPPET);
     }
     console.log(`${shortCut} is pressed`);
   });
 }
+function tryGetValue(key: string, defaultValue: string):string {
+  const value = store.get(key) as string;
+  if(value)return value;
+  store.set(key,defaultValue);
+  return defaultValue;
+}
+

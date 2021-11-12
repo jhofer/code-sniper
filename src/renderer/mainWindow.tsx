@@ -8,9 +8,9 @@ import { CodeBlock, dracula } from "react-code-blocks";
 import { classNames } from "./theme";
 import { useSnippets } from "./useSnippets";
 import {
-  PASTE_SNIPPED,
-  SEARCH_SNIP,
-  NEW_SNIP,
+  PASTE_SNIPPET,
+  SEARCH_SNIPPET,
+  NEW_SNIPPET,
   OPEN_SETTINGS_EDITOR,
 } from "../constants";
 import { NewSnippet } from "./NewSnippet";
@@ -18,16 +18,16 @@ import { NewSnippet } from "./NewSnippet";
 export const MainWindow = () => {
   const [selected, setSelected] = useState(-1);
   const [searchText, setSearchText] = useState<string>("");
-  const [doCreateSnip, setDoCreateSnip] = useState(true);
+  const [doCreateSnip, setDoCreateSnip] = useState(false);
   const [snippets, addSnippets] = useSnippets();
 
   const searchBoxRef = useRef(null);
 
   useEffect(() => {
-    ipcRenderer.on(NEW_SNIP, () => {
+    ipcRenderer.on(NEW_SNIPPET, () => {
       setDoCreateSnip(true);
     });
-    ipcRenderer.on(SEARCH_SNIP, () => {
+    ipcRenderer.on(SEARCH_SNIPPET, () => {
       searchBoxRef.current?.focus();
       setDoCreateSnip(false);
     });
@@ -58,7 +58,13 @@ export const MainWindow = () => {
       }}
     />
   ) : (
-    <Stack>
+    <Stack
+      style={{
+        height: "95vh",
+        width: "100%",
+        padding: 10,
+      }}
+    >
       <SearchBox
         ref={searchBoxRef}
         autoFocus
@@ -72,7 +78,7 @@ export const MainWindow = () => {
         onKeyDown={(e) => {
           if (e.key == "Enter") {
             const selectedSnippets = filteredSnippets[selected];
-            ipcRenderer.send(PASTE_SNIPPED, selectedSnippets.snip);
+            ipcRenderer.send(PASTE_SNIPPET, selectedSnippets.snip);
           }
         }}
       >

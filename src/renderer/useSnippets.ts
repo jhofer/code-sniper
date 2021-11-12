@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   LOAD_SNIPPETS_REQUESTED,
   LOAD_SNIPPETS_SUCCEEDED,
-  SAVE_SNIP,
+  SAVE_SNIPPET,
 } from "../constants";
 
 export interface Snip {
@@ -23,7 +23,7 @@ export function useSnippets(): [Array<Snip>, (snip: Snip) => void] {
 
   const addSnippet = (snip: Snip) => {
     setSnippets([...snippets, snip]);
-    ipcRenderer.send(SAVE_SNIP, snip);
+    ipcRenderer.send(SAVE_SNIPPET, snip);
   };
   return [snippets, addSnippet];
 }

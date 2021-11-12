@@ -7,15 +7,15 @@ import {
   LOAD_SNIPPETS_REQUESTED,
   LOAD_SNIPPETS_SUCCEEDED,
   OPEN_SETTINGS_EDITOR,
-  PASTE_SNIPPED,
+  PASTE_SNIPPET,
   SAVE_PATH_KEY,
-  SAVE_SNIP,
+  SAVE_SNIPPET,
 } from "../constants";
 import { store } from "../index";
 import { loadSnips } from "./loadSnips";
 
 export const registerEventListener = (mainWindow: BrowserWindow) => {
-  ipcMain.on(PASTE_SNIPPED, (event, arg) => {
+  ipcMain.on(PASTE_SNIPPET, (event, arg) => {
     console.log(event);
     console.log(arg);
     mainWindow.minimize();
@@ -33,7 +33,7 @@ export const registerEventListener = (mainWindow: BrowserWindow) => {
     console.log(arg);
     mainWindow.hide();
   });
-  ipcMain.on(SAVE_SNIP, (event, snippet) => {
+  ipcMain.on(SAVE_SNIPPET, (event, snippet) => {
     const savepath = store.get(SAVE_PATH_KEY) as string;
     const { description, snip, language } = snippet;
     const fileName = language + ".md";
