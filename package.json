@@ -26,7 +26,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "electron_typescript_react"
+            "name": "code-sniper"
           }
         },
         {

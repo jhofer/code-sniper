@@ -34,7 +34,6 @@ const createWindow = (): void => {
       nodeIntegration: true,
       contextIsolation: false,
     },
-    icon: path.join(__dirname, '/src/assets/crosshair.png')
   });
   windowContainer.win = mainWindow;
   // and load the index.html of the app.
