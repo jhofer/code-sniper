@@ -4,9 +4,9 @@ import { SearchBox } from "@fluentui/react/lib/SearchBox";
 import { Stack, IStackTokens } from "@fluentui/react/lib/Stack";
 import { FocusZone } from "@fluentui/react-focus";
 import { CodeBlock, dracula } from "react-code-blocks";
-
+import Fuse from 'fuse.js'
 import { classNames } from "./theme";
-import { useSnippets } from "./useSnippets";
+import { Snip, useSnippets } from "./useSnippets";
 import {
   PASTE_SNIPPET,
   SEARCH_SNIPPET,
@@ -20,8 +20,10 @@ export const MainWindow = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [doCreateSnip, setDoCreateSnip] = useState(false);
   const [snippets, addSnippets] = useSnippets();
+  const [filteredSnippets, setFilteredSnippets] = useState([]);
 
   const searchBoxRef = useRef(null);
+  const fuse = useRef<Fuse<Snip>>(null);
 
   useEffect(() => {
     ipcRenderer.on(NEW_SNIPPET, () => {
@@ -40,15 +42,17 @@ export const MainWindow = () => {
     ) {
       setSearchText("");
       ipcRenderer.send(OPEN_SETTINGS_EDITOR);
+    }else if(fuse.current){
+      const result = fuse.current.search(searchText);
+      setFilteredSnippets(result.map(a=>a.item))
     }
   }, [searchText]);
 
-  const filteredSnippets = snippets.filter(
-    (s) =>
-      searchText == "" ||
-      s.description.includes(searchText) ||
-      s.snip.includes(searchText)
-  );
+  useEffect(()=>{
+    fuse.current = new Fuse(snippets, {keys:["snip","language","description"]})
+  },[snippets])
+
+
 
   return doCreateSnip ? (
     <NewSnippet
