@@ -22,7 +22,7 @@ export function useSnippets(): [Array<Snip>, (snip: Snip) => void] {
   }, []);
 
   const addSnippet = (snip: Snip) => {
-    setSnippets([...snippets, snip]);
+    setSnippets([snip, ...snippets]);
     ipcRenderer.send(SAVE_SNIPPET, snip);
   };
   return [snippets, addSnippet];

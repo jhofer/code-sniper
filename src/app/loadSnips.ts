@@ -22,7 +22,7 @@ export const loadSnips = () => {
         const snippets = parseFileContent(data, language);
         return [...all, ...snippets];
       }, [])
-      .filter((s) => s.description && s.snip);
+      .filter((s) => s.description && s.snip).reverse();
   
   } 
   

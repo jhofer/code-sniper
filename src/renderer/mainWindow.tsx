@@ -20,7 +20,7 @@ export const MainWindow = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [doCreateSnip, setDoCreateSnip] = useState(false);
   const [snippets, addSnippets] = useSnippets();
-  const [filteredSnippets, setFilteredSnippets] = useState([]);
+  const [filteredSnippets, setFilteredSnippets] = useState(snippets);
 
   const searchBoxRef = useRef(null);
   const fuse = useRef<Fuse<Snip>>(null);
@@ -42,14 +42,21 @@ export const MainWindow = () => {
     ) {
       setSearchText("");
       ipcRenderer.send(OPEN_SETTINGS_EDITOR);
+    }else if (searchText === ""){
+      setFilteredSnippets(snippets)
     }else if(fuse.current){
       const result = fuse.current.search(searchText);
       setFilteredSnippets(result.map(a=>a.item))
+    }else {
+      setFilteredSnippets(snippets)
     }
   }, [searchText]);
 
   useEffect(()=>{
     fuse.current = new Fuse(snippets, {keys:["snip","language","description"]})
+    if (searchText === ""){
+      setFilteredSnippets(snippets)
+    }
   },[snippets])
 
 
