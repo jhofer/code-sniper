@@ -7,6 +7,10 @@ rules.push({
 });
 
 module.exports = {
+  output: { 
+     // https://github.com/electron-userland/electron-forge/issues/1675
+    publicPath: './../',
+  },
   module: {
     rules,
   },
