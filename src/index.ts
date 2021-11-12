@@ -1,5 +1,5 @@
 import { app, BrowserWindow, globalShortcut } from "electron";
-
+import AutoLaunch from 'auto-launch';
 import Store from "electron-store";
 
 export const store = new Store();
@@ -41,9 +41,8 @@ const createWindow = (): void => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
-  
   registerGlobalShortCuts(mainWindow);
   registerEventListener(mainWindow);
   mainWindow.on("blur", () =>{
@@ -59,6 +58,16 @@ const createWindow = (): void => {
   });
   mainWindow.hide();
   mainWindow.minimize();
+
+
+  let autoLaunch = new AutoLaunch({
+    name: 'Code-Sniper',
+    path: app.getPath('exe'),
+  });
+  autoLaunch.isEnabled().then((isEnabled) => {
+    if (!isEnabled) autoLaunch.enable();
+  });
+
 };
 
 // This method will be called when Electron has finished
