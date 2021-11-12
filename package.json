@@ -2,7 +2,7 @@
   "name": "code-sniper",
   "productName": "code-sniper",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Little tool for code-snippets",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
@@ -19,7 +19,9 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "./src/icons/win/icon.ico"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
