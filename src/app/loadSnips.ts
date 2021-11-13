@@ -1,4 +1,4 @@
-import { store } from "../index";
+import { store } from "../store";
 import fs from "fs";
 import path from "path";
 

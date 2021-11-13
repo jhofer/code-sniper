@@ -12,3 +12,4 @@ export const OPEN_SETTINGS_EDITOR = "open-settings";
 export const SAVE_PATH_KEY = "save-path-key";
 export const NEW_SNIP_SHORT_CUT = "new-snip-shortcut"
 export const SEARCH_SNIP_SHORT_CUT = "serach-snip-shortcut"
+export const SHOW_WINDOW_FRAME ="show-window-frame"

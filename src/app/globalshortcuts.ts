@@ -1,8 +1,9 @@
 import { BrowserWindow, globalShortcut } from "electron";
 import robot from "robotjs";
-import { store } from "../index";
+import { tryGetValue } from "../store";
+
 import { NEW_SNIPPET, NEW_SNIP_SHORT_CUT, SEARCH_SNIPPET, SEARCH_SNIP_SHORT_CUT } from "../constants";
-import { loadSnips, setStorageFolder } from "./loadSnips";
+import { loadSnips } from "./loadSnips";
 
 export const registerGlobalShortCuts = (mainWindow: BrowserWindow) => {
   newSnip(mainWindow);
@@ -46,11 +47,5 @@ function searchSnippets(mainWindow: BrowserWindow) {
     }
     console.log(`${shortCut} is pressed`);
   });
-}
-function tryGetValue(key: string, defaultValue: string):string {
-  const value = store.get(key) as string;
-  if(value)return value;
-  store.set(key,defaultValue);
-  return defaultValue;
 }
 

@@ -11,7 +11,7 @@ import {
   SAVE_PATH_KEY,
   SAVE_SNIPPET,
 } from "../constants";
-import { store } from "../index";
+import { store } from "../store";
 import { loadSnips } from "./loadSnips";
 
 export const registerEventListener = (mainWindow: BrowserWindow) => {

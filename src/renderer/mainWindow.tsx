@@ -46,7 +46,8 @@ export const MainWindow = () => {
       setFilteredSnippets(snippets)
     }else if(fuse.current){
       const result = fuse.current.search(searchText);
-      setFilteredSnippets(result.map(a=>a.item))
+      const sortDesc = (a: Fuse.FuseResult<Snip>, b: Fuse.FuseResult<Snip>): number => b.score - a.score;
+      setFilteredSnippets(result.sort(sortDesc).map(a=>a.item))
     }else {
       setFilteredSnippets(snippets)
     }
@@ -93,7 +94,11 @@ export const MainWindow = () => {
           }
         }}
       >
-        {filteredSnippets.map((s, i) => (
+        {filteredSnippets.map((s, i) => {
+           
+          const snipLines = s.snip.split("\n");
+          const a = s.snip.split("\n").slice(0,15).join("\n")
+          return (
           <li
             className={classNames.codeSnippet}
             key={i}
@@ -105,14 +110,17 @@ export const MainWindow = () => {
           >
             <h1>{s.description}</h1>
             <h2>{s.language}</h2>
+            <div style={{maxHeight:200, overflowY:"scroll"}}>
             <CodeBlock
               text={s.snip}
               language={s.language}
               showLineNumbers
               theme={dracula}
-            />
+              />
+
+              </div>
           </li>
-        ))}
+        )})}
       </FocusZone>
     </Stack>
   );

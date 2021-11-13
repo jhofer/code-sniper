@@ -6,26 +6,27 @@ export const classNames = mergeStyleSets({
     display: "inline-block",
     padding: 10,
     lineHeight: 0,
-    overflow: "hidden",
+    //overflow: "hidden",
   },
   codeSnippet: {
     position: "relative",
     display: "inline-block",
     padding: 10,
+    maxWidth:700,
     boxSizing: "border-box",
     selectors: {
       "&:focus": {
-        outline: "none",
+        border: "none",
       },
       "&:focus:after": {
-        content: '""',
+      /*   content: '""',
         position: "absolute",
         right: 4,
         left: 4,
         top: 4,
-        bottom: 4,
+        bottom: 4, */
        // border: "1px solid " + theme.palette.white,
-        outline: "2px solid " + "#50ecfa"//theme.palette.themePrimary,
+       border: "2px solid " + "#50ecfa"//theme.palette.themePrimary,
       },
     },
   },
