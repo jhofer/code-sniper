@@ -72,6 +72,7 @@ const createWindow = (): void => {
   });
 
   updateElectronApp();
+  store.set("version", app.getVersion());
 };
 
 // This method will be called when Electron has finished

@@ -3,7 +3,7 @@ import { getTheme, mergeStyleSets } from "@fluentui/react";
 const theme = getTheme();
 export const classNames = mergeStyleSets({
   snippetList: {
-    display: "inline-block",
+    flexGrow:2,
     padding: 10,
     lineHeight: 0,
     //overflow: "hidden",

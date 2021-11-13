@@ -1,7 +1,7 @@
 {
   "name": "code-sniper",
   "productName": "Code-Sniper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Little tool for code-snippets",
   "repository": "https://github.com/jhofer/code-sniper",
   "main": ".webpack/main",

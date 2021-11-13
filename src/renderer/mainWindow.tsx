@@ -1,10 +1,10 @@
-import { clipboard, ipcRenderer } from "electron";
+import { app, clipboard, ipcRenderer } from "electron";
 import React, { useEffect, useRef, useState } from "react";
 import { SearchBox } from "@fluentui/react/lib/SearchBox";
 import { Stack, IStackTokens } from "@fluentui/react/lib/Stack";
 import { FocusZone } from "@fluentui/react-focus";
 import { CodeBlock, dracula } from "react-code-blocks";
-import Fuse from 'fuse.js'
+import Fuse from "fuse.js";
 import { classNames } from "./theme";
 import { Snip, useSnippets } from "./useSnippets";
 import {
@@ -14,6 +14,7 @@ import {
   OPEN_SETTINGS_EDITOR,
 } from "../constants";
 import { NewSnippet } from "./NewSnippet";
+import { store } from "../store";
 
 export const MainWindow = () => {
   const [selected, setSelected] = useState(-1);
@@ -42,25 +43,28 @@ export const MainWindow = () => {
     ) {
       setSearchText("");
       ipcRenderer.send(OPEN_SETTINGS_EDITOR);
-    }else if (searchText === ""){
-      setFilteredSnippets(snippets)
-    }else if(fuse.current){
+    } else if (searchText === "") {
+      setFilteredSnippets(snippets);
+    } else if (fuse.current) {
       const result = fuse.current.search(searchText);
-      const sortDesc = (a: Fuse.FuseResult<Snip>, b: Fuse.FuseResult<Snip>): number => b.score - a.score;
-      setFilteredSnippets(result.sort(sortDesc).map(a=>a.item))
-    }else {
-      setFilteredSnippets(snippets)
+      const sortDesc = (
+        a: Fuse.FuseResult<Snip>,
+        b: Fuse.FuseResult<Snip>
+      ): number => b.score - a.score;
+      setFilteredSnippets(result.sort(sortDesc).map((a) => a.item));
+    } else {
+      setFilteredSnippets(snippets);
     }
   }, [searchText]);
 
-  useEffect(()=>{
-    fuse.current = new Fuse(snippets, {keys:["snip","language","description"]})
-    if (searchText === ""){
-      setFilteredSnippets(snippets)
+  useEffect(() => {
+    fuse.current = new Fuse(snippets, {
+      keys: ["snip", "language", "description"],
+    });
+    if (searchText === "") {
+      setFilteredSnippets(snippets);
     }
-  },[snippets])
-
-
+  }, [snippets]);
 
   return doCreateSnip ? (
     <NewSnippet
@@ -95,33 +99,35 @@ export const MainWindow = () => {
         }}
       >
         {filteredSnippets.map((s, i) => {
-           
           const snipLines = s.snip.split("\n");
-          const a = s.snip.split("\n").slice(0,15).join("\n")
+          const a = s.snip.split("\n").slice(0, 15).join("\n");
           return (
-          <li
-            className={classNames.codeSnippet}
-            key={i}
-            aria-posinset={i + 1}
-            aria-setsize={filteredSnippets.length}
-            aria-label="Snip"
-            data-is-focusable
-            onFocus={() => setSelected(i)}
-          >
-            <h1>{s.description}</h1>
-            <h2>{s.language}</h2>
-            <div style={{maxHeight:200, overflowY:"scroll"}}>
-            <CodeBlock
-              text={s.snip}
-              language={s.language}
-              showLineNumbers
-              theme={dracula}
-              />
-
+            <li
+              className={classNames.codeSnippet}
+              key={i}
+              aria-posinset={i + 1}
+              aria-setsize={filteredSnippets.length}
+              aria-label="Snip"
+              data-is-focusable
+              onFocus={() => setSelected(i)}
+            >
+              <h1>{s.description}</h1>
+              <h2>{s.language}</h2>
+              <div style={{ maxHeight: 200, overflowY: "scroll" }}>
+                <CodeBlock
+                  text={s.snip}
+                  language={s.language}
+                  showLineNumbers
+                  theme={dracula}
+                />
               </div>
-          </li>
-        )})}
+            </li>
+          );
+        })}
       </FocusZone>
+      <div style={{ display: "flex", justifyContent:"flex-end", width: "100%", fontSize:10, padding:2 }}>
+        <div>version {store.get("version")}</div>
+      </div>
     </Stack>
   );
 };
