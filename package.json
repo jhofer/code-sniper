@@ -1,8 +1,9 @@
 {
   "name": "code-sniper",
-  "productName": "code-sniper",
+  "productName": "Code-Sniper",
   "version": "1.0.0",
   "description": "Little tool for code-snippets",
+  "repository": "https://github.com/jhofer/code-sniper",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
@@ -42,6 +43,18 @@
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "jhofer",
+              "name": "code-sniper"
+            },
+            "prerelease": true
+          }
         }
       ],
       "plugins": [
@@ -101,6 +114,7 @@
     "react-code-blocks": "^0.0.9-0",
     "react-dom": "^17.0.2",
     "react-syntax-highlighter": "^15.4.4",
-    "robotjs": "^0.6.0"
+    "robotjs": "^0.6.0",
+    "update-electron-app": "^2.0.1"
   }
 }

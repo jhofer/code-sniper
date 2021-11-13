@@ -1,7 +1,7 @@
 import { app, BrowserWindow, globalShortcut } from "electron";
 import AutoLaunch from 'auto-launch';
 import Store from "electron-store";
-import path from "path"
+import updateElectronApp from "update-electron-app"
 import { registerEventListener } from "./app/eventHandler";
 import { registerGlobalShortCuts } from "./app/globalshortcuts";
 import { SAVE_PATH_KEY } from "./constants";
@@ -67,6 +67,7 @@ const createWindow = (): void => {
     if (!isEnabled) autoLaunch.enable();
   });
 
+  updateElectronApp();
 };
 
 // This method will be called when Electron has finished
