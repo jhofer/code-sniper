@@ -1,20 +1,15 @@
-import { app, clipboard, ipcRenderer } from "electron";
+import { ipcRenderer } from "electron";
 import React, { useEffect, useRef, useState } from "react";
 import { SearchBox } from "@fluentui/react/lib/SearchBox";
-import { Stack, IStackTokens } from "@fluentui/react/lib/Stack";
+import { Stack } from "@fluentui/react/lib/Stack";
 import { FocusZone } from "@fluentui/react-focus";
 import { CodeBlock, dracula } from "react-code-blocks";
 import Fuse from "fuse.js";
 import { classNames } from "./theme";
 import { Snip, useSnippets } from "./useSnippets";
 import {
-  PASTE_SNIPPET,
-  SEARCH_SNIPPET,
-  NEW_SNIPPET,
   OPEN_SETTINGS_EDITOR,
 } from "../constants";
-import { NewSnippet } from "./NewSnippet";
-import { store } from "../store";
 
 interface SearchSnippetsProps {
   onSelect: (snip: Snip) => void;
