@@ -1,8 +1,7 @@
 import { ipcRenderer } from "electron";
 import React, { useEffect, useRef, useState } from "react";
 import { Stack } from "@fluentui/react/lib/Stack";
-import Fuse from "fuse.js";
-import { Snip, useSnippets } from "./useSnippets";
+import { useSnippets } from "./useSnippets";
 import {
   PASTE_SNIPPET,
   SEARCH_SNIPPET,
@@ -16,7 +15,6 @@ export const MainWindow = () => {
   const [doCreateSnip, setDoCreateSnip] = useState(false);
   const [_, addSnippets] = useSnippets();
   const searchBoxRef = useRef(null);
-  const fuse = useRef<Fuse<Snip>>(null);
 
   useEffect(() => {
     ipcRenderer.on(NEW_SNIPPET, () => {
